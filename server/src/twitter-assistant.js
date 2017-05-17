@@ -21,7 +21,13 @@ async function getPage(twitter, options) {
   };
   Object.assign(opts, options);
   const response = await twitter.get("statuses/user_timeline", opts);
-  return response.data.filter(t => t.id_str !== opts.max_id);
+  // console.log(response);
+  const userNotExist = response.resp.statusCode === 404;
+  if (userNotExist) {
+    return [];
+  } else {
+    return response.data.filter(t => t.id_str !== opts.max_id);
+  }
 }
 
 /**

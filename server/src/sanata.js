@@ -18,7 +18,10 @@ async function getInfo(username) {
   logger.verbose(`@${username} - Last tweet processed: ${info.lastTweetId}`);
 
   const newInfo = await twitter.getInfo(username, info.lastTweetId);
-  if (!newInfo) {
+  if (!storedInfo && !newInfo) {
+    logger.verbose(`@${username} - No user`);
+    return null;
+  } else if (!newInfo) {
     logger.verbose(`@${username} - No new tweets`);
   } else {
     const { tweets, lastTweetId, fullname, avatar } = newInfo;
